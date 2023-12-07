@@ -1,0 +1,154 @@
+#include"scenegameresult.h"
+#include "DxLib.h"
+#include "winmain.h"
+#include "gamemain.h"
+#include "SceneGameMain.h"
+#include "SceneGameTitle.h"
+
+
+SceneGameResult::SceneGameResult() {
+	_cgBg = LoadGraph("res/result.png");
+	LoadDivGraph("res/button_next_div.png", 2, 2, 1, 600, 300, _cgNb);
+	LoadDivGraph("res/button_title_div.png", 2, 2, 1, 600, 300, _cgTb);
+	select = 0;
+	StageNum = gStageNum;
+	StageNum++;
+	gStageNum = StageNum;
+
+	for(int c=0;c < RANK_CG_MAX;c++)
+	{
+		_cgRa[c] = 0;
+	}
+
+	for (int b = 0; b < RESULT_SE_MAX; b++)
+	{
+		_seRe[b] = 0;
+	}
+
+	count = 0;
+	rank = 0;
+
+
+	_cgRa[RANK1] = LoadGraph("res/UI/rank_1.png");
+	_cgRa[RANK2] = LoadGraph("res/UI/rank_2.png");
+	_cgRa[RANK3] = LoadGraph("res/UI/rank_3.png");
+
+
+	_seRe[0] = LoadSoundMem("se/BGM/わんさかダッシュ.mp3");
+	_seRe[1] = LoadSoundMem("se/system/don.mp3");
+	_seRe[2] = LoadSoundMem("se/system/re_1.mp3");
+	_seRe[3] = LoadSoundMem("se/system/re_2.mp3");
+	_seRe[4] = LoadSoundMem("se/system/re_3.mp3");
+
+	PlaySoundMem(_seRe[0], DX_PLAYTYPE_BACK, TRUE);
+
+	if (score >= 2000)
+	{
+		rank = 2;
+		PlaySoundMem(_seRe[4], DX_PLAYTYPE_BACK, TRUE);
+	}
+	else if (score >= 1000)
+	{
+		rank = 1;
+		PlaySoundMem(_seRe[3], DX_PLAYTYPE_BACK, TRUE);
+	}
+	else if (score >= 0)
+	{
+		rank = 0;
+		PlaySoundMem(_seRe[2], DX_PLAYTYPE_BACK, TRUE);
+	}
+}
+
+SceneGameResult::~SceneGameResult() {
+	DeleteGraph(_cgBg);
+	for (int c = 0; c < RANK_CG_MAX; c++)
+	{
+		DeleteGraph(_cgRa[c]);
+	}
+
+	for (int b = 0; b < RESULT_SE_MAX; b++)
+	{
+		DeleteSoundMem(_seRe[b]);
+	}
+}
+
+void SceneGameResult::Input() {
+	// 何もしない
+}
+
+void SceneGameResult::Process() {
+	/*if(gPad._trg & PAD_INPUT_1) {
+		SceneBase* scene = new SceneGameMain();
+		ChangeScene(scene);
+	}*/
+	if(gPad._trg & PAD_INPUT_RIGHT)
+	{
+		select = 1;
+	}
+	if(gPad._trg & PAD_INPUT_LEFT)
+	{
+		select = 0;
+	}
+
+
+	if (count >= 0)
+	{
+		count += 4 ;
+	}
+	if (count == 256)
+	{
+		PlaySoundMem(_seRe[1], DX_PLAYTYPE_BACK, TRUE);
+	}
+}
+
+void SceneGameResult::Draw() {
+	DrawGraph(0, 0, _cgBg, FALSE);
+	if(select == 0)
+	{
+		DrawGraph(300, 500, _cgNb[1], TRUE);
+		DrawGraph(1200, 500, _cgTb[0], TRUE);
+		if(gPad._trg & PAD_INPUT_4) {
+			SceneBase* scene = new SceneGameMain();
+			ChangeScene(scene);
+		}
+	}
+	if(select == 1)
+	{
+		DrawGraph(300, 500, _cgNb[0], TRUE);
+		DrawGraph(1200, 500, _cgTb[1], TRUE);
+		if(gPad._trg & PAD_INPUT_4) {
+			SceneBase* scene = new SceneGameTitle();
+			ChangeScene(scene);
+		}
+	}
+
+	//評価画像描画////////////////////////////////
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, count);
+
+	DrawGraph(130, 100, _cgRa[rank], TRUE);
+
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+	////////////////////////////////////////////
+
+	SetFontSize(50);
+
+
+	DrawFormatString(1000, 100, GetColor(rand()%256, rand() % 256, rand() % 256), "R E S U L T ");
+
+
+	DrawFormatString(1000, 200, GetColor(255, 255, 255), "破壊したブロック数 =");
+	DrawFormatString(1000, 200, GetColor(rand() % 256, rand() % 256, rand() % 256), "　　　　　　　　　　 %d", cntBrokeBlock);
+	
+	DrawFormatString(1000, 300, GetColor(255, 255, 255), "敵の撃破数 =");	
+	DrawFormatString(1000, 300, GetColor(rand() % 256, rand() % 256, rand() % 256), "　　　　　　 %d", cntDeadEnem);
+
+	DrawFormatString(1000, 400, GetColor(255, 255, 255), "敵の撃破数 = ");
+	DrawFormatString(1000, 400, GetColor(rand() % 256, rand() % 256, rand() % 256), "　　　　　   %d", gtime);
+
+	SetFontSize(100);
+
+	DrawFormatString(1000, 600, GetColor(255, 255, 255), "S C O R E ");
+	DrawFormatString(1000, 800, GetColor(rand() % 256, rand() % 256, rand() % 256), "%d", score);
+
+	SetFontSize(10);
+}

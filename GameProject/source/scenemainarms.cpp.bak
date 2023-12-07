@@ -1,0 +1,258 @@
+#include"scenegamemain.h"
+#include"DxLib.h"
+#include"gamemain.h"
+
+
+	//ëOë§ÇÃòr
+int SceneGameMain::CharaArmProcessR(int i, int j)
+{
+	// égÇ§ÉLÅ[ëÄçÏ
+	int padNo = 0;
+	switch(_gChara[i].group)
+	{
+	case CHARA_GROUP_ARMS:
+		padNo = 0;
+		break;
+	}
+
+	int motChg = -1;
+	int atk = 0;
+	_gChara[i].x = pl_x;
+	_gChara[i].y = pl_y;
+	_gChara[i].arrow = pl_arrow;
+
+
+	switch(_gChara[i].motId)
+	{
+	case MOTION_ARM_F_FALL_R:
+	case MOTION_ARM_F_FALL_L:
+	case MOTION_ARM_F_WAIT_R:
+	case MOTION_ARM_F_WAIT_L:
+	case MOTION_ARM_F_RIDE_R:
+	case MOTION_ARM_F_RIDE_L:
+	case MOTION_ARM_F_ATTACK_R:
+	case MOTION_ARM_F_ATTACK_L:
+	{
+		//use_arm = 1;
+
+		switch(pl_stand)//0:sky,1:ground
+		{
+		case 0:
+		{
+			if(gPad._key/*Ç∆ÇËÇ‹Ç®Ç´*/ & PAD_INPUT_8 && gPad._key/*Ç∆ÇËÇ‹Ç®Ç´*/ & PAD_INPUT_7)
+			{
+				// âEå¸Ç´çUåÇ
+				if(_gChara[i].arrow > 0)
+				{
+					motChg = MOTION_ARM_F_FALL_R;
+					arm[j].ArmAtkType = ARM_ATTACK_FALLING;
+
+				}
+				// ç∂å¸Ç´çUåÇ
+				if(_gChara[i].arrow < 0)
+				{
+					motChg = MOTION_ARM_F_FALL_L;
+
+					
+				}
+				break;
+			}
+			if(gPad._key/*Ç∆ÇËÇ‹Ç®Ç´*/ & PAD_INPUT_8)
+			{
+				// âEå¸Ç´çUåÇ
+				if(_gChara[i].arrow > 0)
+				{
+					motChg = MOTION_ARM_F_ATTACK_R;
+					arm[j].ArmAtkType = ARM_ATTACK_NORMAL;
+			
+				}
+				break;
+			}
+			if(gPad._key/*Ç∆ÇËÇ‹Ç®Ç´*/ & PAD_INPUT_7)
+			{
+				// ç∂å¸Ç´çUåÇ
+				if(_gChara[i].arrow < 0)
+				{
+					motChg = MOTION_ARM_F_ATTACK_L;
+					arm[j].ArmAtkType = ARM_ATTACK_NORMAL;
+
+				}
+				break;
+			}
+			
+		}
+		case 1:
+		{
+			if(gPad._key/*Ç∆ÇËÇ‹Ç®Ç´*/ & PAD_INPUT_8)
+			{
+				// âEå¸Ç´çUåÇ
+				if(_gChara[i].arrow > 0)
+				{
+					motChg = MOTION_ARM_F_ATTACK_R;
+					arm[j].ArmAtkType = ARM_ATTACK_NORMAL;
+				
+					break;
+				}
+
+			}
+			else if(gPad._key/*Ç∆ÇËÇ‹Ç®Ç´*/ & PAD_INPUT_7)
+			{
+				if(_gChara[i].arrow < 0)
+				{
+					// ç∂å¸Ç´çUåÇ
+
+					motChg = MOTION_ARM_F_ATTACK_L;
+					arm[j].ArmAtkType = ARM_ATTACK_NORMAL;
+					
+					break;
+				}
+			}
+			else {
+				//Ç∆ÇËÇ‹Ç®Ç´
+				if(_gChara[i].arrow > 0)
+				{
+					motChg = MOTION_ARM_F_WAIT_R;
+					arm[j].ArmAtkType = ARM_ATTACK_NORMAL;
+					if(gPad._key&PAD_INPUT_3)
+					{
+						motChg = MOTION_ARM_F_RIDE_R;
+					}					break;
+				}
+				// ç∂å¸Ç´çUåÇ
+				if(_gChara[i].arrow < 0)
+				{
+					motChg = MOTION_ARM_F_WAIT_L;
+					arm[j].ArmAtkType = ARM_ATTACK_NORMAL;
+					if(gPad._key & PAD_INPUT_3)
+					{
+						motChg = MOTION_ARM_F_RIDE_L;
+					}					break;
+				}
+			}
+		}
+		}
+	
+
+	}
+	return motChg;
+	}
+
+}
+
+
+//å„ÇÎë§ÇÃòr
+int SceneGameMain::CharaArmProcessL(int i, int j)
+{
+	// égÇ§ÉLÅ[ëÄçÏ
+	int padNo = 0;
+	switch(_gChara[i].group)
+	{
+	case CHARA_GROUP_ARMS:
+		padNo = 0;
+		break;
+	}
+
+	int motChg = -1;
+	int atk = 0;
+	_gChara[i].x = pl_x;
+	_gChara[i].y = pl_y;
+	_gChara[i].arrow = pl_arrow;
+	switch(_gChara[i].motId)
+	{
+	case MOTION_ARM_B_FALL_R:
+	case MOTION_ARM_B_FALL_L:
+	case MOTION_ARM_B_WAIT_R:
+	case MOTION_ARM_B_WAIT_L:
+	case MOTION_ARM_B_RIDE_R:
+	case MOTION_ARM_B_RIDE_L:
+	case MOTION_ARM_B_ATTACK_R:
+	case MOTION_ARM_B_ATTACK_L:
+	{
+		//use_arm = 1;
+
+		switch(pl_stand)//0:sky,1:ground
+		{
+		case 0:
+		{
+			if(gPad._key/*Ç∆ÇËÇ‹Ç®Ç´*/ & PAD_INPUT_7 && gPad._key/*Ç∆ÇËÇ‹Ç®Ç´*/ & PAD_INPUT_8)
+			{
+				// âEå¸Ç´çUåÇ
+				if(_gChara[i].arrow > 0)
+				{
+
+					motChg = MOTION_ARM_B_FALL_R;
+					arm[j].ArmAtkType = ARM_ATTACK_FALLING;
+				}
+				if(_gChara[i].arrow < 0)
+				{
+					motChg = MOTION_ARM_B_FALL_L;
+					arm[j].ArmAtkType = ARM_ATTACK_FALLING;
+			
+					
+				}
+				break;
+			}
+	
+
+
+
+		}
+		case 1:
+		{
+			// âEå¸Ç´çUåÇ
+			if(gPad._key/*Ç∆ÇËÇ‹Ç®Ç´*/ & PAD_INPUT_7)
+			{
+				if(_gChara[i].arrow > 0)
+				{
+					motChg = MOTION_ARM_B_ATTACK_R;
+					arm[j].ArmAtkType = ARM_ATTACK_NORMAL;
+			
+					break;
+				}
+
+			}
+			else if(gPad._key/*Ç∆ÇËÇ‹Ç®Ç´*/ & PAD_INPUT_8)
+			{
+				if(_gChara[i].arrow < 0)
+				{
+					// ç∂å¸Ç´çUåÇ
+
+					motChg = MOTION_ARM_B_ATTACK_L;
+					arm[j].ArmAtkType = ARM_ATTACK_NORMAL;
+				
+					break;
+				}
+			}
+			else {
+				//Ç∆ÇËÇ‹Ç®Ç´
+				if(_gChara[i].arrow > 0)
+				{
+					motChg = MOTION_ARM_B_WAIT_R;
+					arm[j].ArmAtkType = ARM_ATTACK_NORMAL;
+					if(gPad._key & PAD_INPUT_3)
+					{
+						motChg = MOTION_ARM_B_RIDE_R;
+					}					break;
+				}
+				// ç∂å¸Ç´çUåÇ
+				if(_gChara[i].arrow < 0)
+				{
+					motChg = MOTION_ARM_B_WAIT_L;
+					arm[j].ArmAtkType = ARM_ATTACK_NORMAL;
+					if(gPad._key & PAD_INPUT_3)
+					{
+						motChg = MOTION_ARM_B_RIDE_L;
+					}					break;
+				}
+			}
+			//Ç±Ç±Ç‹Ç≈
+			atk = 0;
+
+
+		}
+		//use_arm = 0;
+		}
+		return motChg;
+	}
+	}
+}
