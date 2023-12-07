@@ -31,11 +31,11 @@ void SceneGameMain::BalletProcess_Freeze(int i) {
 
 	if(_gChara[i].y < pl_y) {
 
-		_gChara[i].y += 4;
+		_gChara[i].y += 3;
 	}
 	else {
 
-		_gChara[i].y -= 4;
+		_gChara[i].y -= 3;
 	}
 }
 
